@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # apps
-    'newsboard'
+    'newsboard',
+    'users'
 ]
 
 MIDDLEWARE = [
