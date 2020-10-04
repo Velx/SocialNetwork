@@ -6,7 +6,10 @@ from .helpers import CurrentUser
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['author_id', 'author', 'title', 'text', 'creation_date', 'like_count', 'liked']
+        fields = ['id', 'author_id', 'author', 'title', 'text', 'creation_date', 'like_count', 'liked']
+        extra_kwargs = {
+            'id': {'read_only': True}
+        }
 
     author_id = serializers.HiddenField(default=CurrentUser())
     author = serializers.SlugRelatedField(read_only=True, slug_field='username')
