@@ -31,7 +31,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class CustomTokenRefreshSerializer(TokenRefreshSerializer):
     def validate(self, attrs):
         token = super().validate(attrs)
-        validated_token = JWTAuthentication.get_validated_token(None, token['access'])
-        user = JWTAuthentication.get_user(None, validated_token)
+        jwt = JWTAuthentication()
+        validated_token = jwt.get_validated_token(token['access'])
+        user = jwt.get_user(validated_token)
         update_last_login(None, user)
         return token
