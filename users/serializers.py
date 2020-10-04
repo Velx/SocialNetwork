@@ -1,4 +1,5 @@
 from django.contrib.auth.models import update_last_login
+from django.core.cache import cache
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -18,6 +19,17 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
+class UserActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['last_login', 'last_activity']
+
+    last_activity = serializers.SerializerMethodField()
+
+    def get_last_activity(self, obj):
+        return cache.get(obj.username)
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
