@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # libs
     'rest_framework',
+    'simple_history',
 
     # apps
     'newsboard',
