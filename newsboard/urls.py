@@ -8,6 +8,6 @@ router = SimpleRouter()
 router.register(r'', PostViewSet)
 
 urlpatterns = [
-    path('posts', include(router.urls)),
+    path('posts/', include(router.urls)),
     path('', include(users_urls))
 ]
