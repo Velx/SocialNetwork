@@ -1,14 +1,30 @@
-from rest_framework.permissions import AllowAny
-from rest_framework.generics import CreateAPIView
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework.decorators import action
 from .models import User
-from .serializers import UserSerializer, CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer
+from .serializers import UserSerializer, UserActivitySerializer,\
+    CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer
 
 
-class CreateUserView(CreateAPIView):
-    model = User
+class UserViewSet(CreateModelMixin, GenericViewSet):
+    queryset = User.objects.all()
+    lookup_field = 'username'
     serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]
+        else:
+            return [IsAuthenticated()]
+
+    @action(detail=True, methods=['GET'])
+    def activity(self, request, username=None):
+        user = self.get_object()
+        serializer = UserActivitySerializer(user)
+        return Response(serializer.data)
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
