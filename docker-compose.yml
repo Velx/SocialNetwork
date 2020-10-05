@@ -1,0 +1,50 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    hostname: db
+    ports:
+      - 5432:5432
+    env_file:
+      - ./.env
+    networks:
+      - socialnetwork
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    hostname: redis
+    ports:
+      - 6379:6379
+    networks:
+      - socialnetwork
+
+  server:
+    container_name: server
+    hostname: server
+    ports:
+      - 8000:8000
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/srv/project
+    env_file:
+      - ./.env
+    command: >
+      bash -c '
+      python manage.py makemigrations users &&
+      python manage.py makemigrations newsboard &&
+      python manage.py migrate &&
+      gunicorn socialnetwork.wsgi -b 0.0.0.0:8000'
+    depends_on:
+      - db
+      - redis
+    networks:
+      - socialnetwork
+
+networks:
+  socialnetwork:
+    driver: bridge
