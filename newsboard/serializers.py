@@ -17,7 +17,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_liked(self, obj):
         user = self.context['request'].user
-        if user.likes.filter(pk=obj.pk).exists():
+        if not user.is_anonymous and user.likes.filter(pk=obj.pk).exists():
             return True
         else:
             return False
