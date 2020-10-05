@@ -21,3 +21,8 @@ class PostSerializer(serializers.ModelSerializer):
             return True
         else:
             return False
+
+
+class PostAnalyticsSerializer(serializers.Serializer):
+    date = serializers.DateField(format='iso-8601')
+    likes = serializers.IntegerField()
