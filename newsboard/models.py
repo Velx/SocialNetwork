@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from simple_history.models import HistoricalRecords
 
 user_model = get_user_model()
 
@@ -11,7 +10,6 @@ class Post(models.Model):
     text = models.TextField()
     liked_by = models.ManyToManyField(user_model, related_name='likes')
     creation_date = models.DateTimeField(auto_now=True)
-    history = HistoricalRecords()
 
     @property
     def like_count(self):
