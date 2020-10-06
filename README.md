@@ -15,7 +15,7 @@ Assessment project to StarNavi.
       - DEBUG
       - SECRET_KEY
    - For development version with SQLite3 go to the next step
-3. Run it with docker-compose `docker-compose up -d` or start redis service with default settings and run it with manage.py runserver
+3. Run it with docker-compose `docker-compose up -d` or start redis service with default settings and run server with `python manage.py runserver`
 4. Now server is running on port 8000
 
 ## Endpoints and documentation
